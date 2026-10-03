@@ -1,5 +1,6 @@
 from dotenv import load_dotenv
 import asyncio
+import os
 
 
 load_dotenv()
@@ -23,11 +24,31 @@ async def customisingYourModel():
     print(list(chat.invoke("What's the capital of the Moon?"))[0][1])
     
     
+def LLM_demo():
+    from google import genai
     
+    token = os.getenv("GOOGLE_API_KEY")
     
+    if not token:
+        raise ValueError("There is no API KEY")
+    
+    client = genai.Client(
+        api_key=token
+    )
+    
+    response = client.models.generate_content(
+        model="gemini-2.5-flash-lite",
+        contents="Explain LangChain in simple words",
+        config={
+            'max_output_tokens': 100
+        }
+    )
+    
+    print(response.text)
 
 
 if __name__ == "__main__":
     # main()
-    asyncio.run(customisingYourModel())
+    # asyncio.run(customisingYourModel())
+    LLM_demo()
     
